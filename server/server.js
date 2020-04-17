@@ -5,13 +5,14 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 
 const users = require("./routes/api/users");
+const plaid = require("./routes/api/plaid");
 
 const app = express();
 
 // PWAs want HTTPS!
 function checkHttps(request, response, next) {
   // Check the protocol — if http, redirect to https.
-  if (request.get("X-Forwarded-Proto").indexOf("https") != -1) {
+  if (!request.get("X-Forwarded-Proto") || (request.get("X-Forwarded-Proto").indexOf("https") != -1)) {
     return next();
   } else {
     response.redirect("https://" + request.hostname + request.url);
@@ -52,7 +53,8 @@ app.use(
 app.use(bodyParser.json());
 
 // DB Config
-const db = require("../.data/keys").mongoURI;
+//const db = process.env.MONGO_URL || require("./config/keys").mongoURI;
+const db = process.env.MONGO_URL
 
 // Connect to MongoDB
 mongoose
@@ -71,6 +73,7 @@ require("../.data/passport")(passport);
 
 // Routes
 app.use("/api/users", users);
+app.use("/api/plaid", plaid);
 
 // Start the listener!
 const listener = app.listen(port, () => {

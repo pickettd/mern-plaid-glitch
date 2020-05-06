@@ -16,7 +16,8 @@ import {
   VictoryChart,
   VictoryAxis,
   VictoryTheme,
-  VictoryLegend
+  VictoryLegend,
+  VictoryArea
 } from "victory"; // https://formidable.com/open-source/victory/docs/
 
 class Accounts extends Component {
@@ -99,9 +100,22 @@ class Accounts extends Component {
     let profit = 0;
     let income = 0;
     let spending = 0;
-    let spendingByCategory = {};
-    let categoriesThisMonth = [];
+    const spendingByCategory = {};
+    const categoriesThisMonth = [];
     let categoryCount = 1;
+    const spendingByDate = {};
+    const datesLastThirty = [];
+    const dateNow = new Date();
+
+    for (let a = 30; a > 0; a--) {
+      let insertDate = new Date(Number(dateNow));
+      insertDate.setDate(insertDate.getDate() - a);
+      //datesLastThirty.push(insertDate);
+      datesLastThirty.push({
+        x: a,
+        y: Math.floor(Math.random() * Math.floor(100))
+      });
+    }
 
     let transactionsData = [];
     transactions.forEach(function(account) {
@@ -242,7 +256,14 @@ class Accounts extends Component {
               <b>Spending Chart</b>
             </h5>
             <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
-              <VictoryBar />
+            <VictoryAxis
+                style={{ tickLabels: { angle: -90 } }}
+              />
+              <VictoryAxis dependentAxis tickFormat={(tick) => `$${Math.round(tick)}`}/>
+              <VictoryArea
+                style={{ data: { fill: "#2962ff" } }}
+                data={datesLastThirty}
+              />
             </VictoryChart>
           </div>
         </div>

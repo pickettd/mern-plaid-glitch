@@ -19,6 +19,7 @@ import {
   VictoryLegend,
   VictoryArea
 } from "victory"; // https://formidable.com/open-source/victory/docs/
+import moment from "moment";
 
 class Accounts extends Component {
   componentDidMount() {
@@ -112,7 +113,7 @@ class Accounts extends Component {
       insertDate.setDate(insertDate.getDate() - a);
       //datesLastThirty.push(insertDate);
       datesLastThirty.push({
-        x: a,
+        x: moment(insertDate).format("MM-DD"),
         y: Math.floor(Math.random() * Math.floor(100))
       });
     }
@@ -170,7 +171,7 @@ class Accounts extends Component {
           <h2>
             <b>Transactions</b>
           </h2>
-          <div className="col s8">
+          <div className="col s7">
             {/*<h5 className="numbers">$1,800</h5>*/}
             <h5 className="numbers">{currencyFormatter.format(profit)}</h5>
             <p className="grey-text text-darken-1 helper">Profit this month</p>
@@ -190,7 +191,7 @@ class Accounts extends Component {
             </div>
           </div>
 
-          <div className="col s4">
+          <div className="col s5">
             <h5 className="small">
               <b>Linked Accounts</b>
             </h5>
@@ -221,9 +222,9 @@ class Accounts extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col s8">
-            <h5>
-              <b>Spending per Category</b>
+          <div className="col s6">
+            <h5 className="small">
+              <b>Category</b>
             </h5>
 
             <VictoryPie
@@ -251,13 +252,21 @@ class Accounts extends Component {
               data={categoriesThisMonth}
             />*/}
           </div>
-          <div className="col s4">
-            <h5>
-              <b>Spending Chart</b>
+          <div className="col s6">
+            <h5 className="small">
+              <b>Day</b>
             </h5>
-            <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
-            <VictoryAxis
-                style={{ tickLabels: { angle: -90 } }}
+            <VictoryChart
+            domainPadding={20}
+            theme={VictoryTheme.material}
+            padding={{ left: 50, top: 50, right: 10, bottom: 50 }}
+            >
+              {/*<VictoryBar
+                data={datesLastThirty}
+                horizontal={true}
+              />*/}
+              <VictoryAxis
+                style={{ tickLabels: { angle: -60 } }}
               />
               <VictoryAxis dependentAxis tickFormat={(tick) => `$${Math.round(tick)}`}/>
               <VictoryArea
